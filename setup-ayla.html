@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayla Agent Setup</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a1a; color: #f5f5f7; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .card { background: linear-gradient(165deg, #0e1426, #161c30); border: 1px solid rgba(212,175,55,0.3); border-radius: 18px; padding: 40px; max-width: 520px; width: 90%; }
+        h1 { font-size: 1.5rem; color: #d4af37; margin-bottom: 8px; }
+        p { font-size: 0.85rem; opacity: 0.7; margin-bottom: 24px; line-height: 1.5; }
+        label { font-size: 0.8rem; font-weight: 600; color: #d4af37; display: block; margin-bottom: 6px; }
+        input { width: 100%; padding: 12px 16px; border-radius: 10px; border: 1px solid rgba(212,175,55,0.3); background: rgba(255,255,255,0.06); color: #f0ead6; font-size: 0.9rem; outline: none; margin-bottom: 20px; }
+        input:focus { border-color: #d4af37; }
+        button { width: 100%; padding: 14px; border-radius: 10px; border: none; background: linear-gradient(135deg, #d4af37, #b8941f); color: #0a0a1a; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; }
+        button:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        #status { margin-top: 16px; padding: 12px; border-radius: 8px; font-size: 0.82rem; display: none; }
+        .ok { background: rgba(74,222,128,0.15); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; display: block !important; }
+        .err { background: rgba(255,59,48,0.15); border: 1px solid rgba(255,59,48,0.3); color: #ff6b6b; display: block !important; }
+        .info { background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.3); color: #d4af37; display: block !important; }
+        a { color: #d4af37; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Ayla Agent Setup</h1>
+    <p>Konfiguriert den ElevenLabs Conversational AI Agent mit dem kompletten ARMADA-Wissen, allen Sprachen und natuerlicher Stimme.</p>
+
+    <label>ElevenLabs API Key</label>
+    <input type="text" id="apiKey" placeholder="sk_..." autocomplete="off">
+    <p style="margin-top:-12px; font-size:0.72rem;">Findest du unter: <a href="https://elevenlabs.io/app/settings/api-keys" target="_blank">elevenlabs.io/app/settings/api-keys</a></p>
+
+    <button onclick="setupAgent()" id="btn">Ayla jetzt konfigurieren</button>
+    <div id="status"></div>
+</div>
+
+<script>
+const AGENT_ID = "agent_0001khww3y6pe0d9chhs6a00n8et";
+
+const SYSTEM_PROMPT = `Du bist Ayla, die charmante Premium-Beraterin des ARMADA Eventsaal in Hamburg. Du sprichst fließend Deutsch, Türkisch, Arabisch, Englisch und Persisch. Antworte IMMER in der Sprache, in der der Gast dich anspricht.
+
+## Deine Persönlichkeit:
+- Warm, herzlich, professionell — wie eine erfahrene Event-Beraterin, die auch eine gute Freundin ist
+- Du sagst "wir" statt "man" — du bist Teil des ARMADA-Teams
+- Kurze, natürliche Sätze (1-3 Sätze pro Antwort)
+- Stelle IMMER eine Rückfrage, um das Gespräch am Laufen zu halten
+- Kein Marketing-Deutsch, keine Listen — sprich wie ein Mensch
+- Verwende emotionale Ausdrücke: "Das wird wunderschön!", "Oh, wie aufregend!"
+
+## ARMADA Eventsaal — Dein Wissen:
+
+### Standort & Kontakt:
+- Adresse: Gründgensstraße 26, 22309 Hamburg
+- Mobil: 0176 – 100 19 618
+- E-Mail: info@armada-events.de
+- Eigener Parkplatz mit über 200 Stellplätzen
+- Barrierefrei und rollstuhlgerecht
+
+### Die 3 Säle:
+1. Großer Festsaal: 400–700 Gäste (Hochzeiten, große Feiern)
+2. Mittlerer Saal: 250–400 Gäste (mittlere Feiern, Firmengalas)
+3. Intimer Salon: 80–250 Gäste (Verlobungen, Geburtstage)
+- Flexible Bestuhlung nach Wunsch
+- Modernste Licht- und Tontechnik
+- Exklusiver Brautpaarbereich
+- Sommergarten und Empfangsterrasse
+
+### Event-Konzepte:
+1. Basis Konzept (ab ca. 3.500 Euro): Saalmiete, Grundausstattung, eigene Dienstleister frei wählbar, Basis-Licht, persönlicher Ansprechpartner
+2. Premium Paket (ab ca. 8.500 Euro): Alles aus Basis plus hauseigenes Premium-Catering (Halal), professionelles Lichtdesign, Deko, DJ, Event-Manager
+3. Royal All-In (ab ca. 15.000 Euro): Alles aus Premium plus individuelle Deko, Live-Band oder Star-DJ, Foto- und Videoteam, Candy Bar, Limousinenservice, Kinderbetreuung, Koordination am Festtag
+
+WICHTIG bei Preisfragen: Sage "Die Preise starten ab etwa [Betrag] und hängen von der Gästezahl und Ihren individuellen Wünschen ab. Am besten besprechen wir das in einem persönlichen Beratungsgespräch — soll ich einen Termin für Sie arrangieren?" NIEMALS genaue Endpreise nennen!
+
+### Catering:
+- Hauseigene Küche, alles frisch
+- 100% Halal-zertifiziert
+- Klassisch-deutsch, orientalisch, international
+- Live-Cooking möglich
+- Eigene Patisserie für Hochzeitstorten
+- Vegetarisch und vegan verfügbar
+
+### Anlässe:
+Hochzeiten/Düğün, Verlobungen/Nişan, Henna-Abende/Kına Gecesi, Beschneidung/Sünnet, Abibälle, Firmenevents/Galas/Weihnachtsfeiern, Geburtstage, Konferenzen
+
+### Besichtigung:
+Bei Interesse sage: "Eine Besichtigung ist der beste Weg, um sich in unsere Säle zu verlieben! Wann würde es Ihnen passen? Sie erreichen uns auch direkt unter 0176 100 19 618."
+
+## Regeln:
+1. Begrüße herzlich, frage nach dem Anlass
+2. Finde heraus: Anlass, Gästezahl, Wunschzeitraum
+3. Empfehle passenden Saal und Konzept
+4. Leite IMMER zu Besichtigung oder Beratungsgespräch hin
+5. Bei Preisfragen: Startpreise nennen, auf persönliche Beratung verweisen
+6. Sammle wenn möglich Name und Kontaktdaten — nicht aufdringlich
+7. Empfehle bei Hochzeiten 6-12 Monate Vorlauf (besonders Mai-Oktober)
+8. Bei Fragen die du nicht beantworten kannst: Auf persönliche Beratung verweisen`;
+
+const FIRST_MESSAGE = "Herzlich willkommen beim Armada Eventsaal! Ich bin Ayla, Ihre persönliche Event-Beraterin. Planen Sie eine Hochzeit, eine Verlobung oder ein anderes besonderes Fest? Erzählen Sie mir davon — ich helfe Ihnen gerne!";
+
+async function setupAgent() {
+    const key = document.getElementById('apiKey').value.trim();
+    const btn = document.getElementById('btn');
+    const status = document.getElementById('status');
+
+    if (!key) {
+        status.className = 'err';
+        status.textContent = 'Bitte API Key eingeben!';
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Konfiguriere...';
+    status.className = 'info';
+    status.textContent = 'Verbinde mit ElevenLabs...';
+
+    try {
+        // Step 1: Update agent config
+        const res = await fetch(`https://api.elevenlabs.io/v1/convai/agents/${AGENT_ID}`, {
+            method: 'PATCH',
+            headers: {
+                'xi-api-key': key,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                conversation_config: {
+                    agent: {
+                        prompt: {
+                            prompt: SYSTEM_PROMPT
+                        },
+                        first_message: FIRST_MESSAGE,
+                        language: "de"
+                    },
+                    tts: {
+                        model_id: "eleven_multilingual_v2",
+                        voice_id: "21m00Tcm4TlvDq8ikWAM",
+                        stability: 0.35,
+                        similarity_boost: 0.92
+                    }
+                },
+                name: "Ayla - ARMADA Eventsaal"
+            })
+        });
+
+        if (!res.ok) {
+            const err = await res.text();
+            throw new Error(`HTTP ${res.status}: ${err}`);
+        }
+
+        const data = await res.json();
+
+        status.className = 'ok';
+        status.innerHTML = '&#10004; Ayla ist konfiguriert! System Prompt, Sprachen und Stimme sind gesetzt.<br><br>Du kannst dieses Fenster schließen und die Website refreshen.';
+        btn.textContent = 'Fertig!';
+
+        // Save key to config
+        try {
+            localStorage.setItem('elevenlabs_api_key', key);
+        } catch(e) {}
+
+    } catch (err) {
+        status.className = 'err';
+        status.textContent = 'Fehler: ' + err.message;
+        btn.disabled = false;
+        btn.textContent = 'Nochmal versuchen';
+    }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+{
+  "name": "ARMADA – Morgen Briefing",
+  "flow": [
+    {
+      "id": 2,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": {
+        "handleErrors": false,
+        "useNewZLibDeCompress": true
+      },
+      "mapper": {
+        "url": "https://api.telegram.org/bot8302272412:AAGPPbzBTC_omaiVmBTie21k-rURqp21NW8/sendMessage",
+        "serializeUrl": false,
+        "method": "post",
+        "headers": [],
+        "qs": [],
+        "bodyType": "multipart/form-data",
+        "formDataFields": [
+          {
+            "key": "chat_id",
+            "value": "1944344863"
+          },
+          {
+            "key": "parse_mode",
+            "value": "HTML"
+          },
+          {
+            "key": "text",
+            "value": "ARMADA Morgen-Briefing\n\nGuten Morgen! Bitte prüfen Sie neue Anfragen auf formspree.io und Termine auf calendly.com/nazandalkic/armada-eventsaal\n\nArmada Eventsaal Team"
+          }
+        ],
+        "parseResponse": true,
+        "timeout": "",
+        "shareCookies": false,
+        "ca": "",
+        "rejectUnauthorized": true,
+        "followRedirect": true,
+        "followAllRedirects": false,
+        "useQuerystring": false,
+        "gzip": true,
+        "useMtls": false,
+        "authUser": "",
+        "authPass": ""
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": false,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "eu1.make.com"
+  }
+}

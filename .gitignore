@@ -1,0 +1,16 @@
+# Temp scripts
+_*.js
+_*.py
+_*.txt
+server.js
+
+# Backup files
+*.bak
+*.mp3
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -51,7 +51,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="luxe.css?v=999">
+    <link rel="stylesheet" href="luxe.css?v=1001">
         <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -1174,6 +1174,28 @@ if('serviceWorker' in navigator){
     setInterval(fixWidget, 3000);
     document.addEventListener('DOMContentLoaded', fixWidget);
     window.addEventListener('load', fixWidget);
+})();
+</script>
+<script>
+/* ── VAPI-BTN FALLBACK: Button wird manchmal vom ElevenLabs SDK verschluckt ── */
+(function(){
+    function ensureVapiBtn(){
+        if(document.getElementById('vapi-btn')) return;
+        var btn = document.createElement('button');
+        btn.id = 'vapi-btn';
+        btn.type = 'button';
+        btn.setAttribute('aria-label', 'Ayla starten');
+        btn.setAttribute('title', 'Ayla starten');
+        btn.onclick = function(e){ if(window.handleVoiceButtonClick) window.handleVoiceButtonClick(e); };
+        btn.innerHTML = '<i class="fas fa-phone"></i><span class="voice-copy"><span id="status-text" data-i18n="ayla_label">Ayla Live-Beratung</span><span id="voice-hint" data-i18n="ayla_hint">Anruf starten</span></span>';
+        document.body.appendChild(btn);
+        /* Sprache aktualisieren falls schon gewechselt */
+        if(window.switchLang && window._currentLang) window.switchLang(window._currentLang);
+    }
+    document.addEventListener('DOMContentLoaded', ensureVapiBtn);
+    window.addEventListener('load', function(){ setTimeout(ensureVapiBtn, 1000); });
+    /* Nochmal nach 3s prüfen falls Widget den Button verzögert entfernt */
+    setTimeout(ensureVapiBtn, 3000);
 })();
 </script>
 

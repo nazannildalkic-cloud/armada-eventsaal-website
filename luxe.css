@@ -122,9 +122,11 @@ body {
     margin-bottom: 16px;
     text-transform: uppercase;
     letter-spacing: 6px;
-    color: #fff;
-    -webkit-text-fill-color: #fff;
-    text-shadow: 0 2px 30px rgba(0,0,0,0.7), 0 0 60px rgba(212,175,55,0.3), 0 4px 8px rgba(0,0,0,0.5);
+    background: linear-gradient(135deg, #fff 0%, #f5e6b8 40%, var(--gold) 70%, #fff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 3px 12px rgba(0,0,0,0.6)) drop-shadow(0 0 40px rgba(212,175,55,0.25));
 }
 
 .hero-sub {

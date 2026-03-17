@@ -299,7 +299,24 @@ body {
 .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
 /* === FLOATING BUTTONS === */
-#vapi-btn { display: none !important; }
+#vapi-btn {
+    position: fixed;
+    bottom: 90px;
+    right: 24px;
+    z-index: 2100;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.08));
+    border: 1px solid rgba(212,175,55,0.4);
+    border-radius: 50px;
+    padding: 10px 20px 10px 14px;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    transition: all 0.3s ease;
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+}
 
 /* ElevenLabs Widget – kompakt, blockiert keine Klicks */
 elevenlabs-convai {

@@ -117,23 +117,22 @@ body {
 
 .royal-title {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(3.2rem, 8vw, 6.5rem);
+    font-size: clamp(3.2rem, 8vw, 6rem);
     font-weight: 700;
     margin-bottom: 16px;
     text-transform: uppercase;
-    letter-spacing: 6px;
-    background: linear-gradient(135deg, #fff 0%, #f5e6b8 40%, var(--gold) 70%, #fff 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 3px 12px rgba(0,0,0,0.6)) drop-shadow(0 0 40px rgba(212,175,55,0.25));
+    letter-spacing: 5px;
+    color: #fff;
+    -webkit-text-fill-color: #fff;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.8), 0 0 60px rgba(212,175,55,0.2);
 }
 
 .hero-sub {
     text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
-    opacity: 0.92;
+    letter-spacing: 2.5px;
+    font-size: clamp(0.72rem, 1.4vw, 0.92rem);
+    color: rgba(255,255,255,0.92);
+    text-shadow: 0 1px 10px rgba(0,0,0,0.7);
 }
 
 .scroll-indicator {
@@ -1692,22 +1691,28 @@ footer {
 .section-title {
     font-family: 'Cormorant Garamond', serif;
     font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 700;
     letter-spacing: 0.08em;
     line-height: 1.15;
     text-transform: uppercase;
+    color: var(--gold);
+    text-shadow: 0 2px 12px rgba(212,175,55,0.15), 0 1px 4px rgba(0,0,0,0.6);
 }
 
 .section-subtitle {
-    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-size: clamp(1rem, 2vw, 1.15rem);
     max-width: 860px;
     margin-inline: auto;
+    color: rgba(255,255,255,0.85);
+    letter-spacing: 0.3px;
 }
 
 .divider-gold-center {
-    width: min(140px, 32vw);
+    width: min(180px, 40vw);
     height: 2px;
-    margin: 14px auto 18px;
+    margin: 16px auto 22px;
     background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    box-shadow: 0 0 12px rgba(212,175,55,0.3);
 }
 
 .hero-content .btn.btn-primary {
@@ -2617,10 +2622,12 @@ nav, .navbar { background: rgba(0,0,0,0.55) !important; backdrop-filter: blur(12
 footer { background: rgba(0,0,0,0.75) !important; backdrop-filter: blur(12px); }
 
 /* ═══ TEXT LESBARKEIT – Schatten auf Video-Hintergrund ═══ */
-.royal-title,
+.royal-title {
+    text-shadow: 0 2px 20px rgba(0,0,0,0.8), 0 0 60px rgba(212,175,55,0.2) !important;
+}
 .section-title,
-h1, h2, h3 {
-    text-shadow: 0 2px 16px rgba(0,0,0,0.8), 0 1px 4px rgba(0,0,0,0.9) !important;
+h2, h3 {
+    text-shadow: 0 2px 12px rgba(212,175,55,0.15), 0 1px 4px rgba(0,0,0,0.6) !important;
 }
 
 p, .section-subtitle, .hero-sub, .about-text, .feature-box p,

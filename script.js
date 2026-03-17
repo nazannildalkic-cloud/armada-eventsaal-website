@@ -11,7 +11,8 @@ const translations = {
         about_text: "Erleben Sie Luxus in Perfektion. Ob Hochzeit, Abiball oder Firmenfeier – unsere drei prachtvollen Säle bieten den perfekten Rahmen für 250 bis 700 Gäste in Hamburg. Unser Team begleitet Sie von der ersten Planung bis zum finalen Tanz.",
         pack_title: "Event Konzepte", p1_title: "Basis Konzept", p2_title: "Premium Paket", p3_title: "Royal All-In",
         vid_title: "Impressionen", rev_title: "Das sagen unsere Gäste",
-        form_title: "Termin vereinbaren", form_btn: "Anfrage Senden"
+        form_title: "Termin vereinbaren", form_btn: "Anfrage Senden",
+        ayla_label: "Ayla Live-Beratung", ayla_hint: "Anruf starten"
     },
     tr: {
         nav_home: "Ana Sayfa", nav_packages: "Konseptler", nav_gallery: "Galeri", nav_date: "Randevu",
@@ -20,7 +21,8 @@ const translations = {
         about_text: "Lüksü mükemmellikle yaşayın. 250'den 700 misafir kapasitesine kadar olan salonlarımızla hizmetinizdeyiz.",
         pack_title: "Etkinlik Konseptleri", p1_title: "Temel Paket", p2_title: "Premium Paket", p3_title: "Kraliyet Paketi",
         vid_title: "İzlenimler", rev_title: "Misafirlerimiz ne diyor",
-        form_title: "Randevu Alın", form_btn: "Gönder"
+        form_title: "Randevu Alın", form_btn: "Gönder",
+        ayla_label: "Ayla Canlı Danışmanlık", ayla_hint: "Aramayı Başlat"
     },
     ar: {
         nav_home: "الرئيسية", nav_packages: "المفاهيم", nav_gallery: "المعرض", nav_date: "موعد",
@@ -29,7 +31,8 @@ const translations = {
         about_text: "استمتعوا بالفخامة المطلقة. ثلاث قاعات فاخرة تتسع حتى 700 ضيف في هامبورغ.",
         pack_title: "مفاهيم الفعاليات", p1_title: "المفهوم الأساسي", p2_title: "المفهوم المميز", p3_title: "المفهوم الملكي",
         vid_title: "انطباعات", rev_title: "آراء ضيوفنا",
-        form_title: "احجز موعداً", form_btn: "إرسال الطلب"
+        form_title: "احجز موعداً", form_btn: "إرسال الطلب",
+        ayla_label: "أيلا استشارة مباشرة", ayla_hint: "بدء المكالمة"
     },
     en: {
         nav_home: "Home", nav_packages: "Concepts", nav_gallery: "Gallery", nav_date: "Inquiry",
@@ -38,7 +41,8 @@ const translations = {
         about_text: "Experience luxury at its finest. Whether a wedding, prom, or corporate event – our three magnificent halls provide the perfect setting for 250 to 700 guests in Hamburg.",
         pack_title: "Event Concepts", p1_title: "Basic Concept", p2_title: "Premium Package", p3_title: "Royal All-In",
         vid_title: "Impressions", rev_title: "What our guests say",
-        form_title: "Inquire Now", form_btn: "Send Inquiry"
+        form_title: "Inquire Now", form_btn: "Send Inquiry",
+        ayla_label: "Ayla Live Consultation", ayla_hint: "Start Call"
     },
     fa: {
         nav_home: "خانه", nav_packages: "مفاهیم", nav_gallery: "گالری", nav_date: "قرار ملاقات",
@@ -47,7 +51,8 @@ const translations = {
         about_text: "لوکس بودن را به کمال تجربه کنید. سه تالار باشکوه ما برای ۲۵۰ تا ۷۰۰ مهمان.",
         pack_title: "مفاهیم رویداد", p1_title: "مفهوم پایه", p2_title: "مفهوم ممتاز", p3_title: "مفهوم سلطنتی",
         vid_title: "تصاویر", rev_title: "نظرات مهمانان",
-        form_title: "درخواست وقت", form_btn: "ارسال"
+        form_title: "درخواست وقت", form_btn: "ارسال",
+        ayla_label: "آیلا مشاوره زنده", ayla_hint: "شروع تماس"
     }
 };
 

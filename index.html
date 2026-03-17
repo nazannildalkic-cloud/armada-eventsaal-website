@@ -209,16 +209,14 @@
             <button onclick="switchLang('fa')" class="lang-btn" type="button" aria-label="Sprache Persisch">FA</button>
         </div>
     </nav>
-    <!-- Ayla Call Label – vapi-btn ausgeblendet, ElevenLabs Widget übernimmt -->
-<!-- VAPI BUTTON DEAKTIVIERT – START
+    <!-- Ayla Call Button – sichtbar, triggert ElevenLabs Widget -->
     <button id="vapi-btn" type="button" aria-label="Ayla starten" title="Ayla starten" onclick="handleVoiceButtonClick(event)">
         <i class="fas fa-phone"></i>
         <span class="voice-copy">
-            <span id="status-text">Ayla Live-Beratung</span>
-            <span id="voice-hint">Ayla starten</span>
+            <span id="status-text" data-i18n="ayla_label">Ayla Live-Beratung</span>
+            <span id="voice-hint" data-i18n="ayla_hint">Anruf starten</span>
         </span>
     </button>
-    VAPI BUTTON DEAKTIVIERT – ENDE -->
 
     <header id="home" class="hero">
         <div class="slideshow">

@@ -16,14 +16,14 @@
         <link rel="canonical" href="https://www.armada-events.de/">
     <meta property="og:title" content="ARMADA Eventsaal | Unvergessliche Events in Hamburg">
     <meta property="og:description" content="Exklusive Säle für Ihre Traumhochzeit & Firmenevents – bis zu 700 Gäste.">
-    <meta property="og:image" content="assets/slide2.jpg.jpeg">
+    <meta property="og:image" content="https://armada-eventsaal.netlify.app/assets/slide2.jpg.jpeg">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="de_DE">
         <meta property="og:url" content="https://www.armada-events.de/">
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="ARMADA Eventsaal | Unvergessliche Events in Hamburg">
         <meta name="twitter:description" content="Exklusive Säle für Hochzeiten, Abibälle und Firmenevents in Hamburg.">
-        <meta name="twitter:image" content="assets/slide2.jpg.jpeg">
+        <meta name="twitter:image" content="https://armada-eventsaal.netlify.app/assets/slide2.jpg.jpeg">
         <link rel="preload" as="image" href="assets/slide2.jpg.jpeg" fetchpriority="high">
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -33,7 +33,10 @@
         <link rel="alternate" hreflang="ar" href="https://www.armada-events.de/?lang=ar">
         <link rel="alternate" hreflang="fa" href="https://www.armada-events.de/?lang=fa">
         <link rel="alternate" hreflang="x-default" href="https://www.armada-events.de/">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👑</text></svg>">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="luxe.css?v=999">
         <script type="application/ld+json">
@@ -704,7 +707,7 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col"><div class="footer-logo" style="margin-bottom:15px;"><img src="assets/logo-transparent.png" alt="Armada - Ihr Festsaal" class="footer-logo-img"></div><p>Ihr exklusiver Partner für unvergessliche Events in Hamburg.</p>
-                    <div class="social-links"><a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a></div>
+                    <!-- Social-Media-Links werden ergänzt sobald Accounts eingerichtet sind -->
                 </div>
                 <div class="footer-col"><h4>Kontakt</h4><p>Gründgensstrasse 26<br>22309 Hamburg</p><p>Mobil: 0176 – 100 19 618</p><p>E-Mail: info@armada-events.de</p></div>
                 <div class="footer-col"><h4>Navigation</h4><a href="#home">Home</a><a href="#services">Leistungen</a><a href="#pakete">Konzepte</a><a href="#raeume">Räumlichkeiten</a><a href="#galerie">Galerie</a><a href="#faq">FAQ</a><a href="#termin">Termin buchen</a></div>
@@ -955,31 +958,22 @@ if('serviceWorker' in navigator){
 }
 </script>
 
-<!-- ══ TELEGRAM BESUCHER-BENACHRICHTIGUNG ══ -->
+<!-- ══ TELEGRAM BESUCHER-BENACHRICHTIGUNG (via Netlify Function – Token geschützt) ══ -->
 <script>
 (function(){
   var sent = sessionStorage.getItem('tg_notified');
   if(sent) return;
   sessionStorage.setItem('tg_notified','1');
-  var token = '8302272412:AAGPPbzBTC_omaiVmBTie21k-rURqp21NW8';
-  var chatId = '1944344863';
   var now = new Date().toLocaleString('de-DE',{timeZone:'Europe/Berlin'});
   var ref = document.referrer || 'Direktaufruf';
   var lang = navigator.language || 'unbekannt';
   var page = location.href;
   var ua = navigator.userAgent;
   var device = /Mobile|Android|iPhone/i.test(ua) ? 'Mobile' : 'Desktop';
-  var msg = '🌐 *Neuer Besucher auf ARMADA Website*\n'
-    + '📅 ' + now + '\n'
-    + '📱 Gerät: ' + device + '\n'
-    + '🔗 Seite: ' + page + '\n'
-    + '↩️ Herkunft: ' + ref + '\n'
-    + '🌍 Sprache: ' + lang;
-  var url = 'https://api.telegram.org/bot'+token+'/sendMessage';
-  fetch(url, {
+  fetch('/.netlify/functions/telegram-notify', {
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({chat_id:chatId, text:msg, parse_mode:'Markdown'})
+    body: JSON.stringify({time:now, device:device, page:page, ref:ref, lang:lang})
   }).catch(function(){});
 })();
 </script>
@@ -1008,5 +1002,36 @@ if('serviceWorker' in navigator){
     window.addEventListener('load', fixWidget);
 })();
 </script>
+
+<!-- ══ COOKIE-BANNER (DSGVO) ══ -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:99999;background:rgba(10,10,10,0.97);border-top:1px solid rgba(212,175,55,0.3);padding:20px 24px;font-family:'Montserrat',sans-serif;font-size:0.85rem;color:#ccc;backdrop-filter:blur(10px);">
+  <div style="max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:16px;justify-content:space-between;">
+    <p style="margin:0;flex:1;min-width:280px;line-height:1.6;">
+      Wir verwenden Cookies und externe Dienste (Calendly, Formspree, ElevenLabs), um Ihnen die beste Erfahrung zu bieten.
+      Mehr dazu in unserer <a href="#" onclick="openModal('datenschutz'); return false;" style="color:#d4af37;text-decoration:underline;">Datenschutzerklärung</a>.
+    </p>
+    <div style="display:flex;gap:10px;flex-shrink:0;">
+      <button onclick="acceptCookies()" style="background:#d4af37;color:#0a0a0a;border:none;padding:10px 24px;border-radius:6px;font-weight:600;cursor:pointer;font-size:0.85rem;transition:background .2s;" onmouseover="this.style.background='#e5c54a'" onmouseout="this.style.background='#d4af37'">Akzeptieren</button>
+      <button onclick="declineCookies()" style="background:transparent;color:#999;border:1px solid #444;padding:10px 18px;border-radius:6px;cursor:pointer;font-size:0.85rem;transition:border-color .2s;" onmouseover="this.style.borderColor='#d4af37'" onmouseout="this.style.borderColor='#444'">Nur Notwendige</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var consent = localStorage.getItem('cookie_consent');
+  if(!consent){
+    document.getElementById('cookie-banner').style.display = 'block';
+  }
+})();
+function acceptCookies(){
+  localStorage.setItem('cookie_consent','all');
+  document.getElementById('cookie-banner').style.display = 'none';
+}
+function declineCookies(){
+  localStorage.setItem('cookie_consent','essential');
+  document.getElementById('cookie-banner').style.display = 'none';
+}
+</script>
+
 </body>
 </html>

@@ -907,13 +907,27 @@ window.handleVoiceButtonClick = handleVoiceButtonClick;
     };
 
     /* Musik bei erster Nutzer-Interaktion sofort starten */
-    function removeAutoStart(){
-        ['click','touchstart','keydown','scroll','mousemove'].forEach(function(ev){
+    var preloaded = false;
+    function preloadAudio(){
+        if(!audio && !preloaded){
+            audio = new Audio(MUSIC_SRC);
+            audio.volume = 0.22;
+            audio.loop = true;
+            audio.preload = 'auto';
+            preloaded = true;
+        }
+    }
+    function removePlayListeners(){
+        ['click','touchstart','keydown'].forEach(function(ev){
             document.removeEventListener(ev, autoStart);
         });
+        ['scroll','mousemove'].forEach(function(ev){
+            document.removeEventListener(ev, preloadOnMove);
+        });
     }
+    function preloadOnMove(){ preloadAudio(); }
     function autoStart(e){
-        if(started) { removeAutoStart(); return; }
+        if(started) { removePlayListeners(); return; }
         /* Bei Ayla-Klick: Musik nicht starten, aber Listener behalten */
         if(e && e.type === 'click'){
             var target = e.target;
@@ -925,11 +939,17 @@ window.handleVoiceButtonClick = handleVoiceButtonClick;
                 el = el.parentElement;
             }
         }
-        if(!aylaActive){ initAndPlay(); }
-        removeAutoStart();
+        if(!aylaActive){
+            preloadAudio();
+            initAndPlay();
+        }
+        removePlayListeners();
     }
-    ['click','touchstart','keydown','scroll','mousemove'].forEach(function(ev){
-        document.addEventListener(ev, autoStart, {once: false, passive: true});
+    ['click','touchstart','keydown'].forEach(function(ev){
+        document.addEventListener(ev, autoStart, {passive: true});
+    });
+    ['scroll','mousemove'].forEach(function(ev){
+        document.addEventListener(ev, preloadOnMove, {passive: true});
     });
 
     var videoPlaying = false;

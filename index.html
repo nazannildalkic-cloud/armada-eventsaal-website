@@ -906,13 +906,17 @@ window.handleVoiceButtonClick = handleVoiceButtonClick;
         }).catch(function(){});
     };
 
-    /* Musik bei erster Nutzer-Interaktion automatisch starten */
-    /* NICHT starten wenn Klick auf ElevenLabs Widget oder Ayla-Button */
+    /* Musik bei erster Nutzer-Interaktion sofort starten */
+    function removeAutoStart(){
+        ['click','touchstart','keydown','scroll','mousemove'].forEach(function(ev){
+            document.removeEventListener(ev, autoStart);
+        });
+    }
     function autoStart(e){
-        if(aylaActive) return;
-        /* Klick auf ElevenLabs Widget → Musik NICHT starten */
-        var target = e && e.target;
-        if(target){
+        if(started) { removeAutoStart(); return; }
+        /* Bei Ayla-Klick: Musik nicht starten, aber Listener behalten */
+        if(e && e.type === 'click'){
+            var target = e.target;
             var el = target;
             while(el){
                 if(el.tagName === 'ELEVENLABS-CONVAI') return;
@@ -921,14 +925,12 @@ window.handleVoiceButtonClick = handleVoiceButtonClick;
                 el = el.parentElement;
             }
         }
-        if(!started){ initAndPlay(); }
-        document.removeEventListener('click', autoStart);
-        document.removeEventListener('touchstart', autoStart);
-        document.removeEventListener('keydown', autoStart);
+        if(!aylaActive){ initAndPlay(); }
+        removeAutoStart();
     }
-    document.addEventListener('click', autoStart);
-    document.addEventListener('touchstart', autoStart);
-    document.addEventListener('keydown', autoStart);
+    ['click','touchstart','keydown','scroll','mousemove'].forEach(function(ev){
+        document.addEventListener(ev, autoStart, {once: false, passive: true});
+    });
 
     var videoPlaying = false;
 

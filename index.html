@@ -51,7 +51,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="luxe.css?v=1003">
+    <link rel="stylesheet" href="luxe.css?v=1004">
         <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -917,15 +917,25 @@ window.handleVoiceButtonClick = handleVoiceButtonClick;
         startMusic();
     };
 
-    /* ── Preload bei Maus/Scroll (kein autoplay!) ── */
-    function preload(){
-        ensureAudio();
-        document.removeEventListener('mousemove', preload);
-        document.removeEventListener('scroll', preload);
-        document.removeEventListener('touchstart', preload);
+    /* ── AUTOSTART: Musik bei erster Nutzer-Interaktion starten ── */
+    var autoStartDone = false;
+    function autoStart(e){
+        if(autoStartDone || aylaActive) return;
+        /* Bei Klick auf Ayla-Elemente: NICHT starten */
+        if(e && e.target){
+            var el = e.target;
+            while(el){
+                if(el.tagName === 'ELEVENLABS-CONVAI') return;
+                var id = el.id || '';
+                if(id === 'vapi-btn' || id === 'ayla-pulse-ring' || id === 'music-toggle') return;
+                el = el.parentElement;
+            }
+        }
+        autoStartDone = true;
+        startMusic();
     }
-    ['mousemove','scroll','touchstart'].forEach(function(ev){
-        document.addEventListener(ev, preload, {passive:true, once:true});
+    ['click','touchstart','keydown','scroll'].forEach(function(ev){
+        document.addEventListener(ev, autoStart, {passive:true});
     });
 
     /* ── VIDEO: Musik pausiert bei Video-Play ── */

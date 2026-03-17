@@ -816,11 +816,16 @@ function handleVoiceButtonClick(e){
     if(window._onAylaStart) window._onAylaStart();
     var w = document.querySelector('elevenlabs-convai');
     if(!w) return;
+    /* Widget sichtbar machen für den Call */
+    w.style.setProperty('opacity', '1', 'important');
+    w.style.setProperty('pointer-events', 'auto', 'important');
+    /* vapi-btn verstecken während Call aktiv */
+    var btn = document.getElementById('vapi-btn');
+    if(btn) btn.style.display = 'none';
     var sr = w.shadowRoot;
     if(!sr){ w.click(); return; }
     /* Klick auf den Call-Button im Shadow DOM */
     var btns = Array.from(sr.querySelectorAll('button'));
-    /* Nimm den Button der NICHT Chat/Text ist */
     var callBtn = btns.find(function(b){
         var a = (b.getAttribute('aria-label')||'').toLowerCase();
         var t = (b.textContent||'').toLowerCase();
@@ -975,7 +980,17 @@ window.handleVoiceButtonClick = handleVoiceButtonClick;
             document.addEventListener(ev, window._onAylaStart);
         });
         ['elevenlabs-convai:call_ended','elevenlabs-convai:end','call-ended'].forEach(function(ev){
-            document.addEventListener(ev, window._onAylaEnd);
+            document.addEventListener(ev, function(){
+                if(window._onAylaEnd) window._onAylaEnd();
+                /* Widget wieder verstecken, vapi-btn wieder anzeigen */
+                var w = document.querySelector('elevenlabs-convai');
+                if(w){
+                    w.style.setProperty('opacity', '0', 'important');
+                    w.style.setProperty('pointer-events', 'none', 'important');
+                }
+                var btn = document.getElementById('vapi-btn');
+                if(btn) btn.style.display = '';
+            });
         });
         var b = document.getElementById('music-toggle');
         if(b){ b.addEventListener('click', window._toggleMusic); }

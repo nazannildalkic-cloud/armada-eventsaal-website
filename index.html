@@ -51,7 +51,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="luxe.css?v=1002">
+    <link rel="stylesheet" href="luxe.css?v=1003">
         <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -837,180 +837,132 @@ function handleVoiceButtonClick(e){
 window.handleVoiceButtonClick = handleVoiceButtonClick;
 </script>
 <script>
-/* ═══ MUSIK SYSTEM – EINFACH & ROBUST ═══ */
+/* ═══ MUSIK SYSTEM v2 – ROBUST FÜR MOBILE ═══ */
 (function(){
     var MUSIC_SRC = 'assets/music/sabaia123-turkish-classical-277435.mp3';
     var audio = null;
     var playing = false;
-    var btn = null;
     var aylaActive = false;
-    var started = false;
 
-    function getBtn(){ return btn || (btn = document.getElementById('music-toggle')); }
+    function getBtn(){ return document.getElementById('music-toggle'); }
 
-    function initAndPlay(){
-        if(!audio){
-            audio = new Audio(MUSIC_SRC);
-            audio.volume = 0.22;
-            audio.loop = true;
-        }
-        audio.play().then(function(){
+    function updateBtn(isPlaying){
+        var b = getBtn();
+        if(!b) return;
+        if(isPlaying) b.classList.add('playing');
+        else b.classList.remove('playing');
+    }
+
+    /* Immer frisches Audio erstellen wenn nötig */
+    function ensureAudio(){
+        if(audio) return audio;
+        audio = new Audio(MUSIC_SRC);
+        audio.volume = 0.22;
+        audio.loop = true;
+        audio.preload = 'auto';
+        /* Bei Fehler: Audio zurücksetzen damit nächster Versuch klappt */
+        audio.addEventListener('error', function(){
+            console.log('Audio-Fehler, wird zurückgesetzt');
+            audio = null;
+            playing = false;
+            updateBtn(false);
+        });
+        return audio;
+    }
+
+    function startMusic(){
+        var a = ensureAudio();
+        a.volume = 0.22;
+        a.play().then(function(){
             playing = true;
-            started = true;
-            var b = getBtn();
-            if(b) b.classList.add('playing');
-        }).catch(function(e){ console.log('Musik autoplay blockiert:', e); });
+            updateBtn(true);
+            console.log('Musik gestartet');
+        }).catch(function(e){
+            console.log('Musik-Play fehlgeschlagen:', e.name);
+            /* Bei NotAllowedError: Audio zurücksetzen für nächsten Versuch */
+            if(e.name === 'NotAllowedError'){
+                audio = null;
+            }
+            playing = false;
+            updateBtn(false);
+        });
     }
 
     function stopMusic(){
         if(!audio) return;
         audio.pause();
         playing = false;
-        var b = getBtn();
-        if(b) b.classList.remove('playing');
+        updateBtn(false);
     }
 
+    /* ── TOGGLE: Einziger Weg Musik zu steuern ── */
     window._toggleMusic = function(e){
         if(e){ e.preventDefault(); e.stopPropagation(); }
         if(aylaActive) return;
-        if(!audio || audio.paused){ initAndPlay(); }
-        else { stopMusic(); }
+        if(!audio || audio.paused){
+            startMusic();
+        } else {
+            stopMusic();
+        }
     };
 
+    /* ── AYLA Integration ── */
     window._onAylaStart = function(){
         aylaActive = true;
-        if(audio){
-            audio.pause();
-            audio.volume = 0;
-            playing = false;
-            var b = getBtn();
-            if(b) b.classList.remove('playing');
-        }
+        stopMusic();
     };
 
     window._onAylaEnd = function(){
         aylaActive = false;
-        /* Musik starten/fortsetzen nach Call-Ende */
-        if(!audio){
-            audio = new Audio(MUSIC_SRC);
-            audio.volume = 0.22;
-            audio.loop = true;
-        } else {
-            audio.volume = 0.22;
-        }
-        audio.play().then(function(){
-            playing = true;
-            started = true;
-            var b = getBtn();
-            if(b) b.classList.add('playing');
-        }).catch(function(){});
+        startMusic();
     };
 
-    /* Musik bei erster Nutzer-Interaktion sofort starten */
-    var preloaded = false;
-    function preloadAudio(){
-        if(!audio && !preloaded){
-            audio = new Audio(MUSIC_SRC);
-            audio.volume = 0.22;
-            audio.loop = true;
-            audio.preload = 'auto';
-            preloaded = true;
-        }
+    /* ── Preload bei Maus/Scroll (kein autoplay!) ── */
+    function preload(){
+        ensureAudio();
+        document.removeEventListener('mousemove', preload);
+        document.removeEventListener('scroll', preload);
+        document.removeEventListener('touchstart', preload);
     }
-    function removePlayListeners(){
-        ['click','touchstart','keydown'].forEach(function(ev){
-            document.removeEventListener(ev, autoStart);
-        });
-        ['scroll','mousemove'].forEach(function(ev){
-            document.removeEventListener(ev, preloadOnMove);
-        });
-    }
-    function preloadOnMove(){ preloadAudio(); }
-    function autoStart(e){
-        if(started) { removePlayListeners(); return; }
-        /* Bei Ayla-Klick: Musik nicht starten, aber Listener behalten */
-        if(e && e.type === 'click'){
-            var target = e.target;
-            var el = target;
-            while(el){
-                if(el.tagName === 'ELEVENLABS-CONVAI') return;
-                var id = el.id || '';
-                if(id === 'vapi-btn' || id === 'ayla-pulse-ring') return;
-                el = el.parentElement;
-            }
-        }
-        if(!aylaActive){
-            preloadAudio();
-            initAndPlay();
-        }
-        removePlayListeners();
-    }
-    ['click','touchstart','keydown'].forEach(function(ev){
-        document.addEventListener(ev, autoStart, {passive: true});
-    });
-    ['scroll','mousemove'].forEach(function(ev){
-        document.addEventListener(ev, preloadOnMove, {passive: true});
+    ['mousemove','scroll','touchstart'].forEach(function(ev){
+        document.addEventListener(ev, preload, {passive:true, once:true});
     });
 
-    var videoPlaying = false;
-
-    /* ── VIDEO-ERKENNUNG: Musik stoppt automatisch bei Video-Play ── */
+    /* ── VIDEO: Musik pausiert bei Video-Play ── */
     function setupVideoListeners(){
         document.querySelectorAll('video').forEach(function(v){
             if(v.dataset.musicBound) return;
             v.dataset.musicBound = '1';
             v.addEventListener('play', function(){
-                /* Hintergrund-Video (bg-video) ignorieren – läuft stumm */
                 if(v.id === 'bg-video' || v.muted) return;
-                videoPlaying = true;
-                if(audio && !audio.paused){
-                    audio.pause();
-                    playing = false;
-                    var b = getBtn();
-                    if(b) b.classList.remove('playing');
-                }
+                if(audio && !audio.paused) stopMusic();
             });
             v.addEventListener('pause', function(){
                 if(v.id === 'bg-video' || v.muted) return;
-                videoPlaying = false;
-                /* Nur fortsetzen wenn kein anderes Video läuft und Ayla nicht aktiv */
                 var anyPlaying = false;
                 document.querySelectorAll('video').forEach(function(vv){
                     if(vv.id !== 'bg-video' && !vv.muted && !vv.paused) anyPlaying = true;
                 });
-                if(!anyPlaying && !aylaActive && started && audio){
-                    audio.volume = 0.22;
-                    audio.play().then(function(){
-                        playing = true;
-                        var b = getBtn();
-                        if(b) b.classList.add('playing');
-                    }).catch(function(){});
+                if(!anyPlaying && !aylaActive && playing === false && audio){
+                    startMusic();
                 }
             });
             v.addEventListener('ended', function(){
                 if(v.id === 'bg-video' || v.muted) return;
-                videoPlaying = false;
-                if(!aylaActive && started && audio){
-                    audio.volume = 0.22;
-                    audio.play().then(function(){
-                        playing = true;
-                        var b = getBtn();
-                        if(b) b.classList.add('playing');
-                    }).catch(function(){});
-                }
+                if(!aylaActive && audio) startMusic();
             });
         });
     }
 
-    /* ElevenLabs Events */
+    /* ── Init ── */
     document.addEventListener('DOMContentLoaded', function(){
+        /* Ayla Events */
         ['elevenlabs-convai:call_started','elevenlabs-convai:start','call-started'].forEach(function(ev){
             document.addEventListener(ev, window._onAylaStart);
         });
         ['elevenlabs-convai:call_ended','elevenlabs-convai:end','call-ended'].forEach(function(ev){
             document.addEventListener(ev, function(){
                 if(window._onAylaEnd) window._onAylaEnd();
-                /* Widget wieder verstecken, vapi-btn wieder anzeigen */
                 var w = document.querySelector('elevenlabs-convai');
                 if(w){
                     w.style.setProperty('opacity', '0', 'important');
@@ -1020,20 +972,15 @@ window.handleVoiceButtonClick = handleVoiceButtonClick;
                 if(btn) btn.style.display = '';
             });
         });
-        var b = document.getElementById('music-toggle');
-        if(b){ b.addEventListener('click', window._toggleMusic); }
 
-        /* Video-Listener sofort + nochmal nach 3s (fuer lazy-loaded Videos) */
+        /* Music Button – EINZIGER Click-Handler */
+        var b = getBtn();
+        if(b) b.addEventListener('click', window._toggleMusic);
+
+        /* Video-Listener */
         setupVideoListeners();
         setTimeout(setupVideoListeners, 3000);
     });
-
-    /* _toggleMusic soll auch bei laufendem Video blockieren */
-    var origToggle = window._toggleMusic;
-    window._toggleMusic = function(e){
-        if(videoPlaying) return;
-        origToggle(e);
-    };
 })();
 /* ════════════════════════════════════════ */
 (function(){ /* LEGACY COMPAT – leer */ })();

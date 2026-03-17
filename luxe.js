@@ -28,7 +28,8 @@ const translations = {
         trust_guarantee: "Rundum-Sorglos Garantie", trust_accessible: "100% Barrierefrei", trust_parking: "200+ Parkplätze",
         form_subtitle: "Buchen Sie direkt einen kostenlosen Besichtigungstermin — oder senden Sie uns eine Anfrage.",
         form_general: "Oder: Allgemeine Anfrage senden",
-        cta_badge: "Beliebte Termine 2026 fast ausgebucht", cta_headline: "Sichern Sie sich jetzt Ihren Wunschtermin", cta_btn: "Jetzt Termin anfragen"
+        cta_badge: "Beliebte Termine 2026 fast ausgebucht", cta_headline: "Sichern Sie sich jetzt Ihren Wunschtermin", cta_btn: "Jetzt Termin anfragen",
+        ayla_label: "Ayla Live-Beratung", ayla_hint: "Anruf starten"
     },
     tr: {
         nav_home: "Ana Sayfa", nav_packages: "Konseptler", nav_gallery: "Galeri", nav_date: "Danışmanlık",
@@ -54,7 +55,8 @@ const translations = {
         trust_guarantee: "Tam Kapsamlı Garanti", trust_accessible: "100% Engelsiz", trust_parking: "200+ Park Yeri",
         form_subtitle: "Ücretsiz bir keşif turu için doğrudan randevu alın — veya bize bir talep gönderin.",
         form_general: "Veya: Genel İstek Gönderin",
-        cta_badge: "2026'nın popüler tarihleri dolmak üzere", cta_headline: "Şimdi istediğiniz tarihi güvence altına alın", cta_btn: "Hemen Randevu Al"
+        cta_badge: "2026'nın popüler tarihleri dolmak üzere", cta_headline: "Şimdi istediğiniz tarihi güvence altına alın", cta_btn: "Hemen Randevu Al",
+        ayla_label: "Ayla Canlı Danışmanlık", ayla_hint: "Aramayı Başlat"
     },
     ar: {
         nav_home: "الرئيسية", nav_packages: "المفاهيم", nav_gallery: "المعرض", nav_date: "استشارة",
@@ -80,7 +82,8 @@ const translations = {
         trust_guarantee: "ضمان شامل", trust_accessible: "100% بدون عوائق", trust_parking: "200+ موقف سيارة",
         form_subtitle: "احجز مباشرة موعد معاينة مجاني — أو أرسل لنا طلبًا.",
         form_general: "أو: أرسل استفسارًا عامًا",
-        cta_badge: "المواعيد الشهيرة لعام 2026 تنفد سريعًا", cta_headline: "احجز موعدك المفضل الآن", cta_btn: "احجز موعدًا الآن"
+        cta_badge: "المواعيد الشهيرة لعام 2026 تنفد سريعًا", cta_headline: "احجز موعدك المفضل الآن", cta_btn: "احجز موعدًا الآن",
+        ayla_label: "أيلا استشارة مباشرة", ayla_hint: "بدء المكالمة"
     },
     en: {
         nav_home: "Home", nav_packages: "Concepts", nav_gallery: "Gallery", nav_date: "Consultation",
@@ -106,7 +109,8 @@ const translations = {
         trust_guarantee: "Full Care Guarantee", trust_accessible: "100% Accessible", trust_parking: "200+ Parking Spots",
         form_subtitle: "Book a free viewing appointment directly — or send us a general inquiry.",
         form_general: "Or: Send a General Inquiry",
-        cta_badge: "Popular 2026 dates filling up fast", cta_headline: "Secure your preferred date now", cta_btn: "Request Date Now"
+        cta_badge: "Popular 2026 dates filling up fast", cta_headline: "Secure your preferred date now", cta_btn: "Request Date Now",
+        ayla_label: "Ayla Live Consultation", ayla_hint: "Start Call"
     },
     fa: {
         nav_home: "خانه", nav_packages: "مفاهیم", nav_gallery: "گالری", nav_date: "مشاوره",
@@ -132,7 +136,8 @@ const translations = {
         trust_guarantee: "ضمانت کامل", trust_accessible: "100% بدون مانع", trust_parking: "200+ جای پارک",
         form_subtitle: "مستقیماً یک وقت بازدید رایگان رزرو کنید — یا درخواست خود را برای ما ارسال کنید.",
         form_general: "یا: ارسال یک استعلام عمومی",
-        cta_badge: "تاریخ‌های محبوب ۲۰۲۶ به سرعت در حال پر شدن هستند", cta_headline: "همین حالا تاریخ دلخواه خود را رزرو کنید", cta_btn: "رزرو تاریخ"
+        cta_badge: "تاریخ‌های محبوب ۲۰۲۶ به سرعت در حال پر شدن هستند", cta_headline: "همین حالا تاریخ دلخواه خود را رزرو کنید", cta_btn: "رزرو تاریخ",
+        ayla_label: "آیلا مشاوره زنده", ayla_hint: "شروع تماس"
     }
 };
 

@@ -1078,61 +1078,53 @@ if('serviceWorker' in navigator){
 
 <!-- ElevenLabs Widget Fix: Widget darf nicht die ganze Seite blockieren -->
 <script>
-/* ElevenLabs Widget Fix: z-index, Agent-ID verstecken, Musik-Sync */
+/* ElevenLabs Widget Fix: z-index, Branding komplett verstecken, Musik-Sync */
 (function(){
+    var HIDE_CSS = 'display:none!important;visibility:hidden!important;height:0!important;overflow:hidden!important;font-size:0!important;';
+    function hideBranding(sr){
+        if(!sr) return;
+        /* CSS: P-Container mit whitespace-nowrap = Powered-by Zeile */
+        if(!sr.querySelector('[data-ah]')){
+            var s = document.createElement('style');
+            s.setAttribute('data-ah','1');
+            s.textContent =
+                'p[class*="whitespace-nowrap"]{' + HIDE_CSS + '}' +
+                'span.opacity-30{' + HIDE_CSS + '}' +
+                'a.opacity-30{' + HIDE_CSS + '}' +
+                'a[class*="opacity-30"]{' + HIDE_CSS + '}' +
+                'a[href*="elevenlabs"]{' + HIDE_CSS + '}';
+            sr.appendChild(s);
+        }
+        /* JS Brute-Force: Alle Elemente mit Branding-Text */
+        sr.querySelectorAll('span,p,a,div').forEach(function(el){
+            var t = el.textContent || '';
+            if(t.includes('Powered by') || t.includes('ElevenAgent') || /agent_[a-z0-9]{8,}/.test(t)){
+                el.style.cssText = HIDE_CSS;
+                /* Auch Parent P verstecken falls es der Container ist */
+                if(el.parentElement && el.parentElement.tagName === 'P'){
+                    el.parentElement.style.cssText = HIDE_CSS;
+                }
+            }
+        });
+    }
     function fixWidget(){
         var w = document.querySelector('elevenlabs-convai');
         if(!w) return;
         w.style.setProperty('z-index', '2200', 'important');
-
-        /* Agent-ID, Powered-by und technische Infos im Shadow DOM verstecken */
         var sr = w.shadowRoot;
-        if(sr && !sr.querySelector('[data-armada-hide]')){
-            var s = document.createElement('style');
-            s.setAttribute('data-armada-hide','1');
-            s.textContent = [
-                /* "Powered by ElevenAgents" komplett verstecken */
-                '.opacity-30{ display:none!important; }',
-                'a.underline[href*="eleven"]{ display:none!important; }',
-                'a[href*="elevenlabs"]{ display:none!important; }',
-                /* Container der Powered-by Zeile */
-                '[class*="powered"],span.opacity-30{ display:none!important; }',
-                /* Alles was agent_ ID enthält per JS unten */
-                '[class*="agent-id"],[class*="agentId"],[data-testid*="agent"]{ display:none!important; }'
-            ].join('\n');
-            sr.appendChild(s);
-        }
-        /* Zusätzlich: Alle Textknoten mit agent_ ID oder "Powered" per JS verstecken */
-        if(sr){
-            var allSpans = sr.querySelectorAll('span,p,div,a');
-            allSpans.forEach(function(el){
-                var t = el.textContent || '';
-                if(t.includes('Powered by') || t.includes('ElevenAgent') || /agent_[a-z0-9]{10,}/.test(t)){
-                    el.style.setProperty('display','none','important');
-                }
-            });
-        }
-
-        /* Observer: Musik-Sync + Powered-by/ID nach jedem Render verstecken */
-        if(sr && !w.dataset.musicObserver){
-            w.dataset.musicObserver = '1';
-            var obs = new MutationObserver(function(){
-                /* Prüfe ob ein Call aktiv ist */
-                var hasActive = sr.querySelector('[class*="active"],[class*="listening"],[class*="speaking"],[class*="wave"]');
+        if(!sr) return;
+        hideBranding(sr);
+        if(!w.dataset.mo){
+            w.dataset.mo = '1';
+            new MutationObserver(function(){
+                hideBranding(sr);
+                var hasActive = sr.querySelector('[class*="listening"],[class*="speaking"],[class*="wave"]');
                 if(hasActive && window._onAylaStart) window._onAylaStart();
-                /* Nach JEDEM DOM-Update: Powered-by und Agent-ID erneut verstecken */
-                sr.querySelectorAll('span,p,div,a').forEach(function(el){
-                    var t = el.textContent || '';
-                    if(t.includes('Powered by') || t.includes('ElevenAgent') || /agent_[a-z0-9]{10,}/.test(t)){
-                        el.style.setProperty('display','none','important');
-                    }
-                });
-            });
-            obs.observe(sr, {childList:true, subtree:true, attributes:true, attributeFilter:['class']});
+            }).observe(sr, {childList:true, subtree:true, attributes:true});
         }
     }
-    var iv = setInterval(fixWidget, 500);
-    setTimeout(function(){ clearInterval(iv); }, 20000);
+    /* Dauerhaft prüfen — Widget rendert bei Call-Start/Ende komplett neu */
+    setInterval(fixWidget, 600);
     document.addEventListener('DOMContentLoaded', fixWidget);
     window.addEventListener('load', fixWidget);
 })();

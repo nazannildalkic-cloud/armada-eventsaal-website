@@ -1085,29 +1085,48 @@ if('serviceWorker' in navigator){
         if(!w) return;
         w.style.setProperty('z-index', '2200', 'important');
 
-        /* Agent-ID und technische Infos im Shadow DOM verstecken */
+        /* Agent-ID, Powered-by und technische Infos im Shadow DOM verstecken */
         var sr = w.shadowRoot;
         if(sr && !sr.querySelector('[data-armada-hide]')){
             var s = document.createElement('style');
             s.setAttribute('data-armada-hide','1');
             s.textContent = [
-                /* Agent-ID Text verstecken */
-                '[class*="agent-id"],[class*="agentId"],[data-testid*="agent"]{ display:none!important; }',
-                /* Powered-by und Footer-Texte mit IDs */
-                '.powered-by,.footer-text,[class*="powered"]{ display:none!important; }',
-                /* Alles was wie eine ID aussieht (agent_...) */
-                'span,p,div{ }' /* Placeholder fuer spezifische Selektoren */
+                /* "Powered by ElevenAgents" komplett verstecken */
+                '.opacity-30{ display:none!important; }',
+                'a.underline[href*="eleven"]{ display:none!important; }',
+                'a[href*="elevenlabs"]{ display:none!important; }',
+                /* Container der Powered-by Zeile */
+                '[class*="powered"],span.opacity-30{ display:none!important; }',
+                /* Alles was agent_ ID enthält per JS unten */
+                '[class*="agent-id"],[class*="agentId"],[data-testid*="agent"]{ display:none!important; }'
             ].join('\n');
             sr.appendChild(s);
         }
+        /* Zusätzlich: Alle Textknoten mit agent_ ID oder "Powered" per JS verstecken */
+        if(sr){
+            var allSpans = sr.querySelectorAll('span,p,div,a');
+            allSpans.forEach(function(el){
+                var t = el.textContent || '';
+                if(t.includes('Powered by') || t.includes('ElevenAgent') || /agent_[a-z0-9]{10,}/.test(t)){
+                    el.style.setProperty('display','none','important');
+                }
+            });
+        }
 
-        /* Musik-Stopp Observer: Wenn Widget-State sich aendert (Call aktiv) */
+        /* Observer: Musik-Sync + Powered-by/ID nach jedem Render verstecken */
         if(sr && !w.dataset.musicObserver){
             w.dataset.musicObserver = '1';
             var obs = new MutationObserver(function(){
-                /* Prüfe ob ein Call aktiv ist (Widget zeigt Waveform/Timer) */
+                /* Prüfe ob ein Call aktiv ist */
                 var hasActive = sr.querySelector('[class*="active"],[class*="listening"],[class*="speaking"],[class*="wave"]');
                 if(hasActive && window._onAylaStart) window._onAylaStart();
+                /* Nach JEDEM DOM-Update: Powered-by und Agent-ID erneut verstecken */
+                sr.querySelectorAll('span,p,div,a').forEach(function(el){
+                    var t = el.textContent || '';
+                    if(t.includes('Powered by') || t.includes('ElevenAgent') || /agent_[a-z0-9]{10,}/.test(t)){
+                        el.style.setProperty('display','none','important');
+                    }
+                });
             });
             obs.observe(sr, {childList:true, subtree:true, attributes:true, attributeFilter:['class']});
         }

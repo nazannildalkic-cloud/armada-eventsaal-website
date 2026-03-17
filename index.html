@@ -893,6 +893,56 @@ window.handleVoiceButtonClick = handleVoiceButtonClick;
     document.addEventListener('touchstart', autoStart);
     document.addEventListener('keydown', autoStart);
 
+    var videoPlaying = false;
+
+    /* ── VIDEO-ERKENNUNG: Musik stoppt automatisch bei Video-Play ── */
+    function setupVideoListeners(){
+        document.querySelectorAll('video').forEach(function(v){
+            if(v.dataset.musicBound) return;
+            v.dataset.musicBound = '1';
+            v.addEventListener('play', function(){
+                /* Hintergrund-Video (bg-video) ignorieren – läuft stumm */
+                if(v.id === 'bg-video' || v.muted) return;
+                videoPlaying = true;
+                if(audio && !audio.paused){
+                    audio.pause();
+                    playing = false;
+                    var b = getBtn();
+                    if(b) b.classList.remove('playing');
+                }
+            });
+            v.addEventListener('pause', function(){
+                if(v.id === 'bg-video' || v.muted) return;
+                videoPlaying = false;
+                /* Nur fortsetzen wenn kein anderes Video läuft und Ayla nicht aktiv */
+                var anyPlaying = false;
+                document.querySelectorAll('video').forEach(function(vv){
+                    if(vv.id !== 'bg-video' && !vv.muted && !vv.paused) anyPlaying = true;
+                });
+                if(!anyPlaying && !aylaActive && started && audio){
+                    audio.volume = 0.22;
+                    audio.play().then(function(){
+                        playing = true;
+                        var b = getBtn();
+                        if(b) b.classList.add('playing');
+                    }).catch(function(){});
+                }
+            });
+            v.addEventListener('ended', function(){
+                if(v.id === 'bg-video' || v.muted) return;
+                videoPlaying = false;
+                if(!aylaActive && started && audio){
+                    audio.volume = 0.22;
+                    audio.play().then(function(){
+                        playing = true;
+                        var b = getBtn();
+                        if(b) b.classList.add('playing');
+                    }).catch(function(){});
+                }
+            });
+        });
+    }
+
     /* ElevenLabs Events */
     document.addEventListener('DOMContentLoaded', function(){
         ['elevenlabs-convai:call_started','elevenlabs-convai:start','call-started'].forEach(function(ev){
@@ -903,7 +953,18 @@ window.handleVoiceButtonClick = handleVoiceButtonClick;
         });
         var b = document.getElementById('music-toggle');
         if(b){ b.addEventListener('click', window._toggleMusic); }
+
+        /* Video-Listener sofort + nochmal nach 3s (fuer lazy-loaded Videos) */
+        setupVideoListeners();
+        setTimeout(setupVideoListeners, 3000);
     });
+
+    /* _toggleMusic soll auch bei laufendem Video blockieren */
+    var origToggle = window._toggleMusic;
+    window._toggleMusic = function(e){
+        if(videoPlaying) return;
+        origToggle(e);
+    };
 })();
 /* ════════════════════════════════════════ */
 (function(){ /* LEGACY COMPAT – leer */ })();

@@ -279,13 +279,17 @@ body {
     cursor: pointer;
     background: none;
     border: none;
-    padding: 5px;
+    padding: 10px;
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+    align-items: center;
     z-index: 1001;
 }
 
 .hamburger span {
     display: block;
-    width: 22px; height: 2px;
+    width: 24px; height: 2.5px;
     background: var(--gold);
     transition: var(--transition);
 }
@@ -2659,12 +2663,17 @@ p, .section-subtitle, .hero-sub, .about-text, .feature-box p,
 
 /* ── Smartphone (≤ 480px) ── */
 @media (max-width: 480px) {
-    /* Top-Bar kompakter */
+    /* Top-Bar kompakter aber lesbar (min 12px) */
     .top-bar-inner {
-        font-size: 0.6rem;
+        font-size: 0.75rem;
         gap: 8px;
         flex-wrap: wrap;
         justify-content: center;
+    }
+    .top-bar-inner a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
     }
 
     /* Hero Titel gut lesbar */
@@ -2699,11 +2708,11 @@ p, .section-subtitle, .hero-sub, .about-text, .feature-box p,
         gap: 12px;
     }
     .stats-strip-num { font-size: 2rem; }
-    .stats-strip-label { font-size: 0.72rem; }
+    .stats-strip-label { font-size: 0.8rem; }
 
     /* Trust Badges – 1 pro Reihe auf sehr kleinen Screens */
     .trust-badges { gap: 8px; }
-    .trust-badge-item span { font-size: 0.78rem; }
+    .trust-badge-item span { font-size: 0.85rem; }
 
     /* Galerie – 2 Spalten */
     .gallery-grid {

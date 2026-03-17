@@ -1126,8 +1126,6 @@ if('serviceWorker' in navigator){
             w.dataset.mo = '1';
             new MutationObserver(function(){
                 hideBranding(sr);
-                var hasActive = sr.querySelector('[class*="listening"],[class*="speaking"],[class*="wave"]');
-                if(hasActive && window._onAylaStart) window._onAylaStart();
             }).observe(sr, {childList:true, subtree:true});
         }
     }
